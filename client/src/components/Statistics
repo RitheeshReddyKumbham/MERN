@@ -1,0 +1,29 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const Statistics = () => {
+  const [statistics, setStatistics] = useState({ total_sale: 0, total_items_sold: 0 });
+
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/statistics/');
+        setStatistics(response.data);
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+      }
+    };
+
+    fetchStatistics();
+  }, []);
+
+  return (
+    <div>
+      <h1>Statistics</h1>
+      <p> Total Sales: ${statistics.total_sale}</p>
+      <p>Total Items Sold: {statistics.total_items_sold}</p>
+    </div>
+  )
+}
+
+export default Statistics;

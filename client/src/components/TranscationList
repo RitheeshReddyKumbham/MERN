@@ -1,0 +1,50 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const TransactionList = () => {
+  const [transactions, setTransactions] = useState([]);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/transactions/', {
+          params: {
+            search_q: search
+          }
+        });
+        setTransactions(response.data);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+    };
+
+    fetchTransactions();
+  }, [search]);
+
+  return (
+    <div>
+      <h1>Transactions</h1>
+      <input 
+        type="text" 
+        placeholder="Search..." 
+        value={search} 
+        onChange={(e) => setSearch(e.target.value)} 
+      />
+      <ul>
+        {transactions.map((transaction) => (
+          <li key={transaction.id}>
+            <h2>{transaction.title}</h2>
+            <p>{transaction.description}</p>
+            <p>Price: ${transaction.price}</p>
+            <p>Category: {transaction.category}</p>
+            <p>Sold: {transaction.sold ? 'Yes' : 'No'}</p>
+            <p>Date of Sale: {transaction.dateOfSale}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default TransactionList;

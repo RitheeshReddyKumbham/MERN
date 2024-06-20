@@ -1,0 +1,28 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const Total = () => {
+  const [totalTransactions, setTotalTransactions] = useState(0);
+
+  useEffect(() => {
+    const fetchTotalTransactions = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/total');
+        setTotalTransactions(response.data.total_transactions);
+      } catch (error) {
+        console.error('Error fetching total transactions:', error);
+      }
+    };
+
+    fetchTotalTransactions();
+  }, []);
+
+  return (
+    <div>
+      <h1>Total Transactions</h1>
+      <p>Total Transactions: {totalTransactions}</p>
+    </div>
+  );
+};
+
+export default Total;
